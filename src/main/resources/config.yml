@@ -1,0 +1,286 @@
+# ============================================
+#         КОНФИГУРАЦИЯ АРТЕФАКТОВ
+# ============================================
+# 
+# Артефакты работают ПАССИВНО когда лежат в:
+# - Слоты хотбара (0-8)
+# - Слот оффхенда (40)
+# - Слоты брони (36-39)
+#
+# Каждый артефакт может иметь эффекты:
+# - POTION_EFFECTS: Эффекты зелий пока в слоте
+# - ATTACK_EFFECTS: Эффекты при атаке
+# - DEFENSE_EFFECTS: Эффекты при получении урона
+# - PASSIVE_ABILITIES: Специальные пассивные способности
+# ============================================
+
+# Общие настройки плагина
+settings:
+  # Включить/выключить плагин полностью
+  enabled: true
+  
+  # Интервал обновления в тиках (20 тиков = 1 секунда)
+  update-interval: 5
+  
+  # Миры где артефакты работают (<all> = все миры)
+  enabled-worlds:
+    - "<all>"
+  
+  # Слоты где работают артефакты
+  enabled-slots:
+    - 0    # Слот хотбара 1
+    - 1    # Слот хотбара 2
+    - 2    # Слот хотбара 3
+    - 3    # Слот хотбара 4
+    - 4    # Слот хотбара 5
+    - 5    # Слот хотбара 6
+    - 6    # Слот хотбара 7
+    - 7    # Слот хотбара 8
+    - 8    # Слот хотбара 9
+    - 40   # Оффхенд
+  
+  # Включить слоты брони
+  enable-armor-slots: true
+  
+  # Показывать частицы когда артефакт активен
+  show-particles: true
+  
+  # Показывать сообщения при активации
+  show-messages: false
+  
+  # Режим отладки
+  debug: false
+
+# Сообщения плагина
+messages:
+  # Сообщение когда артефакт активирован
+  artifact-activated: "&aАртефакт &e%artifact% &aактивирован!"
+  
+  # Сообщение когда артефакт деактивирован
+  artifact-deactivated: "&cАртефакт &e%artifact% &cдеактивирован."
+  
+  # Сообщение когда мешок заполнен
+  bag-full: "&cМешок заполнен! Максимум &e%slots% &cартефактов."
+  
+  # Сообщение когда пытаешься положить не-артефакт в мешок
+  bag-not-artifact: "&cВ мешок можно класть только артефакты!"
+  
+  # Сообщение когда из мешка удалены не-артефакты
+  bag-cleaned: "&c⚠ Из аномального мешка удалены предметы, не являющиеся артефактами!"
+  
+  # Сообщение при клике на мешок
+  bag-info: "&6Аномальный Мешок: &e%slots% слотов для артефактов!"
+
+# Настройки аномальных мешков
+bags:
+  # Включить аномальные мешки
+  enabled: true
+  
+  # Включить валидацию (удаление не-артефактов)
+  validate-contents: true
+  
+  # Интервал валидации в тиках (60 тиков = 3 секунды)
+  validation-interval: 60
+  
+  # Лимиты слотов по тирам
+  tier-limits:
+    tier-1: 2
+    tier-2: 4
+    tier-3: 6
+    tier-4: 8
+
+# ============================================
+#              СПИСОК АРТЕФАКТОВ
+# ============================================
+
+artifacts:
+  # Талисман Голода - убирает голод
+  hunger_charm:
+    material: GLOW_BERRIES
+    name: "§eТалисман Голода"
+    lore:
+      - "§7Талисман подавляющий чувство голода."
+      - ""
+      - "§e§lПАССИВНО: §fНасыщение V"
+    enabled: true
+    effects:
+      potion-effects:
+        - effect: SATURATION
+          level: 5
+
+  # Талисман Зайца - прыжок III
+  bunny_charm:
+    material: RABBIT_FOOT
+    name: "§fТалисман Зайца"
+    lore:
+      - "§7Кроличья лапка дарящая"
+      - "§7невероятную прыгучесть."
+      - ""
+      - "§e§lПАССИВНО: §aПрыжок III"
+    enabled: true
+    effects:
+      potion-effects:
+        - effect: JUMP_BOOST
+          level: 3
+
+  # Талисман Плаща - невидимость
+  cloak_charm:
+    material: FIREWORK_STAR
+    name: "§5Талисман Плаща"
+    lore:
+      - "§7Магический плащ скрывающий"
+      - "§7владельца от чужих глаз."
+      - ""
+      - "§e§lПАССИВНО: §7Невидимость"
+    enabled: true
+    effects:
+      passive-abilities:
+        - type: INVISIBILITY_PASSIVE
+
+  # Талисман Воды - подводное дыхание
+  aqua_charm:
+    material: PRISMARINE_CRYSTALS
+    name: "§bТалисман Воды"
+    lore:
+      - "§7Кристаллы призмарина дарящие"
+      - "§7способность дышать под водой."
+      - ""
+      - "§e§lПАССИВНО: §bПодводное Дыхание"
+    enabled: true
+    effects:
+      passive-abilities:
+        - type: WATER_BREATHING
+
+  # Зуб Стража - здоровье
+  guardian_tooth:
+    material: PRISMARINE_SHARD
+    name: "§9Зуб Стража"
+    lore:
+      - "§7Осколок призмарина наделяющий"
+      - "§7владельца крепким здоровьем."
+      - ""
+      - "§e§lПАССИВНО: §c+4 сердца"
+    enabled: true
+    effects:
+      potion-effects:
+        - effect: HEALTH_BOOST
+          level: 2
+
+  # Душа Ангела - левитация
+  angel_soul:
+    material: DRAGON_BREATH
+    name: "§fДуша Ангела"
+    lore:
+      - "§7Драконье дыхание дарующее"
+      - "§7способность парить в воздухе."
+      - ""
+      - "§e§lПАССИВНО: §dЛевитация"
+    enabled: true
+    effects:
+      passive-abilities:
+        - type: LEVITATION
+
+  # Сахар Ианита - скорость IV
+  sugar_ianite:
+    material: SUGAR
+    name: "§eСахар Ианита"
+    lore:
+      - "§7Священный сахар дарящий"
+      - "§7невероятную скорость."
+      - ""
+      - "§e§lПАССИВНО: §bСкорость IV"
+    enabled: true
+    effects:
+      potion-effects:
+        - effect: SPEED
+          level: 4
+
+  # Огненный Кристалл - огнестойкость
+  fire_crystal:
+    material: TERRACOTTA
+    name: "§cОгненный Кристалл"
+    lore:
+      - "§7Красная терракота защищающая"
+      - "§7от огненной смерти."
+      - ""
+      - "§e§lПАССИВНО: §cОгнестойкость"
+    enabled: true
+    effects:
+      potion-effects:
+        - effect: FIRE_RESISTANCE
+          level: 1
+
+  # Перо Ангела - медленное падение
+  angel_feather:
+    material: FEATHER
+    name: "§fПеро Ангела"
+    lore:
+      - "§7Божественное перо дарящее"
+      - "§7мягкое приземление."
+      - ""
+      - "§e§lПАССИВНО: §fМедленное Падение"
+    enabled: true
+    effects:
+      passive-abilities:
+        - type: SLOW_FALLING
+
+  # Героический Колокол Деревни - герой деревни
+  village_bell:
+    material: BELL
+    name: "§6Героический Колокол Деревни"
+    lore:
+      - "§7Колокол прославляющий героя"
+      - "§7деревни."
+      - ""
+      - "§e§lПАССИВНО: §aГерой Деревни"
+    enabled: true
+    effects:
+      passive-abilities:
+        - type: HERO_OF_THE_VILLAGE
+
+  # Прах Отца - регенерация
+  father_ashes:
+    material: GUNPOWDER
+    name: "§7Прах Отца"
+    lore:
+      - "§7Священный пепел очищающий"
+      - "§7и исцеляющий раны."
+      - ""
+      - "§e§lПАССИВНО: §dРегенерация I"
+    enabled: true
+    effects:
+      potion-effects:
+        - effect: REGENERATION
+          level: 1
+
+  # Раковина Семи Морей - проводник
+  shell_7seas:
+    material: NAUTILUS_SHELL
+    name: "§3Раковина Семи Морей"
+    lore:
+      - "§7Древняя раковина содержащая"
+      - "§7силу океана."
+      - ""
+      - "§e§lПАССИВНО: §bСила Проводника"
+    enabled: true
+    effects:
+      passive-abilities:
+        - type: CONDUIT_POWER
+
+  # Осколок Силы - сопротивление + урон
+  power_shard:
+    material: AMETHYST_SHARD
+    name: "§cОсколок Силы"
+    lore:
+      - "§7Метистовый осколок наделяющий"
+      - "§7невероятной мощью."
+      - ""
+      - "§e§lПАССИВНО: §cСила III"
+      - "§e§lПАССИВНО: §9Сопротивление III"
+    enabled: true
+    effects:
+      potion-effects:
+        - effect: STRENGTH
+          level: 3
+        - effect: DAMAGE_RESISTANCE
+          level: 3

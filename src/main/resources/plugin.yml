@@ -1,0 +1,12 @@
+name: ArtifactPlugin
+version: '${project.version}'
+main: me.luka.artifactplugin.ArtifactPlugin
+api-version: '1.21'
+author: Areshk1n
+description: Passive artifacts for quickbar slots
+
+commands:
+  artifact:
+    description: Artifact management commands
+    usage: /<command> give <id> [player] [amount]
+    aliases: [artifacts, art]
