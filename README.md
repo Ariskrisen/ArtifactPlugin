@@ -63,14 +63,10 @@ Anomalous Bags are special bundles that can store artifacts inside them:
 
 **How it works:**
 1. Get a bag: `/artifact bag 2`
-2. Put artifacts inside via Shift+RightClick or drag & drop
+2. Put artifacts inside via drag & drop
 3. Put the bag in your hotbar
 4. All artifacts inside work passively!
 
 ## License
 
 This project is licensed under the MIT License.
-
----
-
-Made with ❤️ for Minecraft servers
