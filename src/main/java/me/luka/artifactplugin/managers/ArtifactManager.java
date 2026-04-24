@@ -4,6 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -29,6 +32,19 @@ public class ArtifactManager {
     private final NamespacedKey ARTIFACT_KEY;
     private final Set<UUID> hasMagnetic;
     private final Map<UUID, Double> magneticRanges;
+    private final Map<UUID, Double> playerScaleMultipliers;
+    private final Map<UUID, Double> playerSpeedMultipliers;
+    private final Map<UUID, Double> playerDamageMultipliers;
+    private final Map<UUID, Double> playerHealthMultipliers;
+    private final Map<UUID, AttributeModifier> scaleAttributeModifiers;
+    private final Map<UUID, AttributeModifier> speedAttributeModifiers;
+    private final Map<UUID, AttributeModifier> damageAttributeModifiers;
+    private final Map<UUID, AttributeModifier> maxHealthAttributeModifiers;
+
+    private static final UUID SCALE_MODIFIER_UUID = UUID.fromString("11111111-1111-1111-1111-111111111111");
+    private static final UUID SPEED_MODIFIER_UUID = UUID.fromString("22222222-2222-2222-2222-222222222222");
+    private static final UUID DAMAGE_MODIFIER_UUID = UUID.fromString("33333333-3333-3333-3333-333333333333");
+    private static final UUID MAX_HEALTH_MODIFIER_UUID = UUID.fromString("44444444-4444-4444-4444-444444444444");
 
     public ArtifactManager(ArtifactPlugin plugin) {
         this.plugin = plugin;
@@ -36,6 +52,14 @@ public class ArtifactManager {
         this.artifacts = new HashMap<>();
         this.hasMagnetic = new HashSet<>();
         this.magneticRanges = new HashMap<>();
+        this.playerScaleMultipliers = new HashMap<>();
+        this.playerSpeedMultipliers = new HashMap<>();
+        this.playerDamageMultipliers = new HashMap<>();
+        this.playerHealthMultipliers = new HashMap<>();
+        this.scaleAttributeModifiers = new HashMap<>();
+        this.speedAttributeModifiers = new HashMap<>();
+        this.damageAttributeModifiers = new HashMap<>();
+        this.maxHealthAttributeModifiers = new HashMap<>();
     }
 
     public void start() {
@@ -284,6 +308,11 @@ public class ArtifactManager {
         
         boolean hasMagneticNow = false;
         double maxMagneticRange = 0;
+        double lastScaleMultiplier = 1.0;
+        double lastHealthMultiplier = 1.0;
+        double lastSpeedMultiplier = 1.0;
+        double lastDamageMultiplier = 1.0;
+        boolean hasSizeArtifact = false;
         
         for (Artifact artifact : activeArtifacts) {
             for (Artifact.PotionEffectConfig config : artifact.getPotionEffects()) {
@@ -473,7 +502,23 @@ case NIGHT_VISION:
                             player.addPotionEffect(new PotionEffect(hero, 6000, 0, true, true));
                         }
                         break;
-                        
+
+                    case SHRINK:
+                    hasSizeArtifact = true;
+                    lastScaleMultiplier = ability.getScaleMultiplier();
+                    lastHealthMultiplier = ability.getHealthMultiplier();
+                    lastSpeedMultiplier = ability.getSpeedMultiplier();
+                    lastDamageMultiplier = ability.getDamageMultiplier();
+                    break;
+
+                case GROW:
+                    hasSizeArtifact = true;
+                    lastScaleMultiplier = ability.getScaleMultiplier();
+                    lastHealthMultiplier = ability.getHealthMultiplier();
+                    lastSpeedMultiplier = ability.getSpeedMultiplier();
+                    lastDamageMultiplier = ability.getDamageMultiplier();
+                    break;
+
                     default:
                         break;
                 }
@@ -504,6 +549,9 @@ case NIGHT_VISION:
             hasMagnetic.remove(uuid);
             magneticRanges.remove(uuid);
         }
+
+        applySizeAttributeByUuid(uuid, hasSizeArtifact, lastScaleMultiplier, lastHealthMultiplier,
+                         lastSpeedMultiplier, lastDamageMultiplier);
     }
 
     public void processAttackEffects(Player player, Entity target, EntityDamageByEntityEvent event) {
@@ -828,6 +876,14 @@ case NIGHT_VISION:
     public void cleanup() {
         hasMagnetic.clear();
         magneticRanges.clear();
+        playerScaleMultipliers.clear();
+        playerSpeedMultipliers.clear();
+        playerDamageMultipliers.clear();
+        playerHealthMultipliers.clear();
+        scaleAttributeModifiers.clear();
+        speedAttributeModifiers.clear();
+        damageAttributeModifiers.clear();
+        maxHealthAttributeModifiers.clear();
     }
 
     private boolean hasVanillaPotionEffect(Player player, PotionEffectType type) {
@@ -852,5 +908,121 @@ case NIGHT_VISION:
                 }
             }
         }.runTaskTimer(plugin, 10L, 10L);
+    }
+
+    private void applySizeAttribute(Player player, double scaleMultiplier, double healthMultiplier,
+                                     double speedMultiplier, double damageMultiplier) {
+        UUID uuid = player.getUniqueId();
+        String playerName = player.getName();
+        double baseDamage = 1.0;
+        double baseHealth = 20.0;
+        double baseSpeed = 0.1;
+
+        Double storedHealth = playerHealthMultipliers.get(uuid);
+        Double storedDamage = playerDamageMultipliers.get(uuid);
+        Double storedScale = playerScaleMultipliers.get(uuid);
+
+        if (storedScale != null && storedScale == scaleMultiplier &&
+            storedHealth != null && storedHealth == healthMultiplier &&
+            storedDamage != null && storedDamage == damageMultiplier) {
+            return;
+        }
+
+        double newMaxHealth = baseHealth * healthMultiplier;
+        double newSpeed = baseSpeed * speedMultiplier;
+
+        playerHealthMultipliers.put(uuid, healthMultiplier);
+        playerDamageMultipliers.put(uuid, damageMultiplier);
+        playerSpeedMultipliers.put(uuid, speedMultiplier);
+        playerScaleMultipliers.put(uuid, scaleMultiplier);
+
+        String scaleValue = String.valueOf(scaleMultiplier);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+            "attribute " + playerName + " minecraft:scale base set " + scaleValue);
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+            "attribute " + playerName + " minecraft:max_health base set " + newMaxHealth);
+
+        String speedValue = String.valueOf(newSpeed);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+            "attribute " + playerName + " minecraft:movement_speed base set " + speedValue);
+
+        double newDamage = baseDamage * damageMultiplier;
+        String damageValue = String.valueOf(newDamage);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+            "attribute " + playerName + " minecraft:attack_damage base set " + damageValue);
+
+        if (newMaxHealth > 0) {
+            double currentHealth = player.getHealth();
+            player.setHealth(Math.min(currentHealth, newMaxHealth));
+        }
+    }
+
+    private void removeExistingSizeModifier(AttributeInstance attr, UUID modifierUuid) {
+        for (AttributeModifier mod : attr.getModifiers()) {
+            if (mod.getUniqueId().equals(modifierUuid)) {
+                attr.removeModifier(mod);
+                break;
+            }
+        }
+    }
+
+    private void removeSizeAttribute(Player player) {
+        UUID uuid = player.getUniqueId();
+        String playerName = player.getName();
+
+        playerHealthMultipliers.remove(uuid);
+        playerDamageMultipliers.remove(uuid);
+        playerSpeedMultipliers.remove(uuid);
+        playerScaleMultipliers.remove(uuid);
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+            "attribute " + playerName + " minecraft:scale base set 1.0");
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+            "attribute " + playerName + " minecraft:max_health base set 20");
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+            "attribute " + playerName + " minecraft:movement_speed base set 0.1");
+
+        player.removePotionEffect(PotionEffectType.STRENGTH);
+    }
+
+    private void removeAttributeModifier(AttributeInstance attr, UUID uuid) {
+        AttributeModifier scaleMod = scaleAttributeModifiers.get(uuid);
+        if (scaleMod != null) {
+            removeExistingSizeModifier(attr, scaleMod.getUniqueId());
+        }
+
+        AttributeModifier speedMod = speedAttributeModifiers.get(uuid);
+        if (speedMod != null) {
+            removeExistingSizeModifier(attr, speedMod.getUniqueId());
+        }
+
+        AttributeModifier damageMod = damageAttributeModifiers.get(uuid);
+        if (damageMod != null) {
+            removeExistingSizeModifier(attr, damageMod.getUniqueId());
+        }
+    }
+
+    private void applySizeAttributeByUuid(UUID uuid, boolean hasSizeArtifact, double scaleMultiplier, double healthMultiplier,
+                                    double speedMultiplier, double damageMultiplier) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return;
+
+        if (!hasSizeArtifact) {
+            removeSizeAttribute(player);
+            return;
+        }
+
+        applySizeAttribute(player, scaleMultiplier, healthMultiplier,
+                      speedMultiplier, damageMultiplier);
+    }
+
+    private void removeSizeAttributeByUuid(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null) {
+            removeSizeAttribute(player);
+        }
     }
 }

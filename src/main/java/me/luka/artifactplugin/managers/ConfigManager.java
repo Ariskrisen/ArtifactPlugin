@@ -519,6 +519,13 @@ public class ConfigManager {
                 case MAGIC_REDUCTION:
                     ability.setMagicReduction(((Number) map.getOrDefault("percent", 25)).doubleValue());
                     break;
+                case SHRINK:
+                case GROW:
+                    ability.setScaleMultiplier(((Number) map.getOrDefault("scale-multiplier", 1.0)).doubleValue());
+                    ability.setHealthMultiplier(((Number) map.getOrDefault("health-multiplier", 1.0)).doubleValue());
+                    ability.setSpeedMultiplier(((Number) map.getOrDefault("speed-multiplier", 1.0)).doubleValue());
+                    ability.setDamageMultiplier(((Number) map.getOrDefault("damage-multiplier", 1.0)).doubleValue());
+                    break;
                 default:
                     break;
             }

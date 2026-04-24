@@ -882,6 +882,12 @@ public class Artifact {
         private double witherReduction;
         private double magicReduction;
 
+        // Size scaling
+        private double scaleMultiplier;
+        private double healthMultiplier;
+        private double damageMultiplier;
+        private double speedMultiplier;
+
         public PassiveAbilityType getType() {
             return type;
         }
@@ -1225,6 +1231,38 @@ public class Artifact {
         public void setMagicReduction(double magicReduction) {
             this.magicReduction = magicReduction;
         }
+
+        public double getScaleMultiplier() {
+            return scaleMultiplier;
+        }
+
+        public void setScaleMultiplier(double scaleMultiplier) {
+            this.scaleMultiplier = scaleMultiplier;
+        }
+
+        public double getHealthMultiplier() {
+            return healthMultiplier;
+        }
+
+        public void setHealthMultiplier(double healthMultiplier) {
+            this.healthMultiplier = healthMultiplier;
+        }
+
+        public double getDamageMultiplier() {
+            return damageMultiplier;
+        }
+
+        public void setDamageMultiplier(double damageMultiplier) {
+            this.damageMultiplier = damageMultiplier;
+        }
+
+        public double getSpeedMultiplier() {
+            return speedMultiplier;
+        }
+
+        public void setSpeedMultiplier(double speedMultiplier) {
+            this.speedMultiplier = speedMultiplier;
+        }
     }
 
     public enum PassiveAbilityType {
@@ -1237,7 +1275,7 @@ public class Artifact {
         LOOT_BONUS, FISHING_LUCK, AQUA_AFFINITY, RESPIRATION, DAMAGE_VS, FAST_PLACE,
         ARROW_EFFECTS, TNT_IGNITE, PICK_BLOCK, TRACKING_COMPASS, MAGNETIC, SNOWBALL_IMMUNE,
         ARROW_DEFLECT, CREEPER_IMMUNE, WITHER_REDUCTION, MAGIC_REDUCTION, GLOWING,
-        LEVITATION, HERO_OF_THE_VILLAGE
+        LEVITATION, HERO_OF_THE_VILLAGE, SHRINK, GROW
     }
 
     public static class TickEffect {
