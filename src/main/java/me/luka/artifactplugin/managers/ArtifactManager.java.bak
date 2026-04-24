@@ -293,7 +293,7 @@ public class ArtifactManager {
                     6000,
                     config.getLevel(),
                     true,
-                    true
+                    false
                 ));
             }
             
@@ -308,13 +308,13 @@ public class ArtifactManager {
                         double healthPercent = player.getHealth() / player.getMaxHealth();
                         if (healthPercent <= ability.getRageThreshold()) {
                             shouldHaveEffects.add(PotionEffectType.STRENGTH);
-                    player.addPotionEffect(new PotionEffect(
-                        PotionEffectType.STRENGTH,
-                        6000,
-                        ability.getRageStrengthLevel(),
-                        true,
-                        true
-                    ));
+                            player.addPotionEffect(new PotionEffect(
+                                PotionEffectType.STRENGTH,
+                                6000,
+                                ability.getRageStrengthLevel(),
+                                true,
+                                false
+                            ));
                         }
                         break;
                         
@@ -322,81 +322,76 @@ public class ArtifactManager {
                         double healthPercent2 = player.getHealth() / player.getMaxHealth();
                         if (healthPercent2 <= ability.getAdrenalineThreshold()) {
                             shouldHaveEffects.add(PotionEffectType.SPEED);
-                    player.addPotionEffect(new PotionEffect(
-                        PotionEffectType.SPEED,
-                        6000,
-                        ability.getAdrenalineSpeedLevel(),
-                        true,
-                        true
-                    ));
+                            player.addPotionEffect(new PotionEffect(
+                                PotionEffectType.SPEED,
+                                6000,
+                                ability.getAdrenalineSpeedLevel(),
+                                true,
+                                false
+                            ));
                         }
                         break;
                         
                     case FIRE_RESISTANCE_PASSIVE:
                         shouldHaveEffects.add(PotionEffectType.FIRE_RESISTANCE);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 6000, 0, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 6000, 0, true, false));
                         break;
                         
                     case WATER_BREATHING:
                         shouldHaveEffects.add(PotionEffectType.WATER_BREATHING);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 6000, 0, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 6000, 0, true, false));
                         break;
                         
-case NIGHT_VISION:
+                    case NIGHT_VISION:
                         shouldHaveEffects.add(PotionEffectType.NIGHT_VISION);
-                        // Skip if player has night vision from any other source (like /nv command)
-                        if (player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-                            break;
-                        }
-                        // Use ambient=false to match vanilla-like effects
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, org.bukkit.potion.PotionEffect.INFINITE_DURATION, 0, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 6000, 0, true, false));
                         break;
                         
-                     case SLOW_FALLING:
-                         shouldHaveEffects.add(PotionEffectType.SLOW_FALLING);
-                         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 6000, 0, true, true));
-                         break;
+                    case SLOW_FALLING:
+                        shouldHaveEffects.add(PotionEffectType.SLOW_FALLING);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 6000, 0, true, false));
+                        break;
                         
                     case REGENERATION_PASSIVE:
                         shouldHaveEffects.add(PotionEffectType.REGENERATION);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, (int) ability.getRegenAmount() - 1, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, (int) ability.getRegenAmount() - 1, true, false));
                         break;
                         
                     case INVISIBILITY_PASSIVE:
                         shouldHaveEffects.add(PotionEffectType.INVISIBILITY);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true, false));
                         break;
                         
                     case HASTE:
                         shouldHaveEffects.add(PotionEffectType.HASTE);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 6000, ability.getHasteLevel() - 1, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 6000, ability.getHasteLevel() - 1, true, false));
                         break;
                         
                     case JUMP_BOOST:
                         shouldHaveEffects.add(PotionEffectType.JUMP_BOOST);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 6000, ability.getJumpBoostLevel() - 1, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 6000, ability.getJumpBoostLevel() - 1, true, false));
                         break;
                         
                     case LUCK_BOOST:
                         shouldHaveEffects.add(PotionEffectType.LUCK);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 6000, ability.getLuckLevel() - 1, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 6000, ability.getLuckLevel() - 1, true, false));
                         break;
                         
                     case CONDUIT_POWER:
                         shouldHaveEffects.add(PotionEffectType.CONDUIT_POWER);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.CONDUIT_POWER, 6000, 0, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.CONDUIT_POWER, 6000, 0, true, false));
                         break;
                         
                     case DOLPHIN_GRACE:
                         shouldHaveEffects.add(PotionEffectType.DOLPHINS_GRACE);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 6000, 0, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 6000, 0, true, false));
                         break;
                         
                     case SOUL_SPEED:
                         PotionEffectType soulSpeed = PotionEffectType.getByName("SOUL_SPEED");
                         if (soulSpeed != null) {
                             shouldHaveEffects.add(soulSpeed);
-                            player.addPotionEffect(new PotionEffect(soulSpeed, 6000, ability.getSoulSpeedLevel() - 1, true, true));
+                            player.addPotionEffect(new PotionEffect(soulSpeed, 6000, ability.getSoulSpeedLevel() - 1, true, false));
                         }
                         break;
                         
@@ -404,7 +399,7 @@ case NIGHT_VISION:
                         PotionEffectType thorns = PotionEffectType.getByName("THORNS");
                         if (thorns != null) {
                             shouldHaveEffects.add(thorns);
-                            player.addPotionEffect(new PotionEffect(thorns, 6000, ability.getThornsLevel() - 1, true, true));
+                            player.addPotionEffect(new PotionEffect(thorns, 6000, ability.getThornsLevel() - 1, true, false));
                         }
                         break;
                         
@@ -412,7 +407,7 @@ case NIGHT_VISION:
                         PotionEffectType kbRes = PotionEffectType.getByName("KNOCKBACK_RESISTANCE");
                         if (kbRes != null) {
                             shouldHaveEffects.add(kbRes);
-                            player.addPotionEffect(new PotionEffect(kbRes, 6000, ability.getKnockbackResistanceLevel() - 1, true, true));
+                            player.addPotionEffect(new PotionEffect(kbRes, 6000, ability.getKnockbackResistanceLevel() - 1, true, false));
                         }
                         break;
                         
@@ -420,7 +415,7 @@ case NIGHT_VISION:
                         PotionEffectType resistance = PotionEffectType.getByName("DAMAGE_RESISTANCE");
                         if (resistance != null) {
                             shouldHaveEffects.add(resistance);
-                                player.addPotionEffect(new PotionEffect(resistance, 6000, ability.getProtectionLevel() - 1, true, true));
+                            player.addPotionEffect(new PotionEffect(resistance, 6000, ability.getProtectionLevel() - 1, true, false));
                         }
                         break;
                         
@@ -428,7 +423,7 @@ case NIGHT_VISION:
                         PotionEffectType frostWalker = PotionEffectType.getByName("FROST_WALKER");
                         if (frostWalker != null) {
                             shouldHaveEffects.add(frostWalker);
-                            player.addPotionEffect(new PotionEffect(frostWalker, 6000, ability.getFrostWalkerLevel() - 1, true, true));
+                            player.addPotionEffect(new PotionEffect(frostWalker, 6000, ability.getFrostWalkerLevel() - 1, true, false));
                         }
                         break;
                         
@@ -436,7 +431,7 @@ case NIGHT_VISION:
                         PotionEffectType glowing = PotionEffectType.getByName("GLOWING");
                         if (glowing != null) {
                             shouldHaveEffects.add(glowing);
-                                player.addPotionEffect(new PotionEffect(glowing, 6000, 0, true, true));
+                            player.addPotionEffect(new PotionEffect(glowing, 6000, 0, true, false));
                         }
                         break;
                         
@@ -444,25 +439,25 @@ case NIGHT_VISION:
                         PotionEffectType depthStrider = PotionEffectType.getByName("DEPTH_STRIDER");
                         if (depthStrider != null) {
                             shouldHaveEffects.add(depthStrider);
-                            player.addPotionEffect(new PotionEffect(depthStrider, 6000, ability.getDepthStriderLevel() - 1, true, true));
+                            player.addPotionEffect(new PotionEffect(depthStrider, 6000, ability.getDepthStriderLevel() - 1, true, false));
                         }
                         break;
                         
                     case ANTI_FALL:
                         shouldHaveEffects.add(PotionEffectType.SLOW_FALLING);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 6000, 0, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 6000, 0, true, false));
                         break;
                         
                     case NO_HUNGER:
                         shouldHaveEffects.add(PotionEffectType.SATURATION);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 6000, 10, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 6000, 10, true, false));
                         break;
                         
                     case LEVITATION:
                         PotionEffectType levitation = PotionEffectType.getByName("LEVITATION");
                         if (levitation != null) {
                             shouldHaveEffects.add(levitation);
-                            player.addPotionEffect(new PotionEffect(levitation, 6000, 0, true, true));
+                            player.addPotionEffect(new PotionEffect(levitation, 6000, 0, true, false));
                         }
                         break;
                         
@@ -470,7 +465,7 @@ case NIGHT_VISION:
                         PotionEffectType hero = PotionEffectType.getByName("HERO_OF_THE_VILLAGE");
                         if (hero != null) {
                             shouldHaveEffects.add(hero);
-                            player.addPotionEffect(new PotionEffect(hero, 6000, 0, true, true));
+                            player.addPotionEffect(new PotionEffect(hero, 6000, 0, true, false));
                         }
                         break;
                         
@@ -483,12 +478,7 @@ case NIGHT_VISION:
         Set<PotionEffectType> toRemove = new HashSet<>();
         for (PotionEffect effect : player.getActivePotionEffects()) {
             PotionEffectType type = effect.getType();
-            // Don't remove infinite effects - they are likely from other plugins/commands
-            if (effect.getDuration() == org.bukkit.potion.PotionEffect.INFINITE_DURATION) {
-                continue;
-            }
-            // Only remove effects that we applied (ambient=true), not vanilla potions (ambient=false)
-            if (effect.isAmbient() && !shouldHaveEffects.contains(type)) {
+            if (!shouldHaveEffects.contains(type)) {
                 toRemove.add(type);
             }
         }
@@ -830,19 +820,6 @@ case NIGHT_VISION:
         magneticRanges.clear();
     }
 
-    private boolean hasVanillaPotionEffect(Player player, PotionEffectType type) {
-        for (PotionEffect effect : player.getActivePotionEffects()) {
-            if (effect.getType().equals(type) && !effect.isAmbient()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean hasPotionEffect(Player player, PotionEffectType type) {
-        return player.hasPotionEffect(type);
-    }
-
     private void startTask() {
         new BukkitRunnable() {
             @Override
@@ -851,6 +828,6 @@ case NIGHT_VISION:
                     updatePlayerEffects(player);
                 }
             }
-        }.runTaskTimer(plugin, 10L, 10L);
+        }.runTaskTimer(plugin, 5L, 5L);
     }
 }
